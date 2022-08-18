@@ -15,6 +15,7 @@ class MoneyAdmin(admin.ModelAdmin):
     )
     readonly_fields = ['added_by', 'modified_by']
     list_filter = [('building', DropdownFilter)]
+    search_fields = ('name',)
     # list_editable = ['amount']
     # form = CollectionForm
 
