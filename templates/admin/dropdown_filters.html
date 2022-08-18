@@ -1,0 +1,15 @@
+{% load i18n %}
+<script type="text/javascript">var go_from_select = function(opt) { window.location = window.location.pathname + opt };</script>
+<div class="col-md-6" style="">
+    <label class="col-form-label" for="id_choice_{{title|lower}}" style="display: table-cell; padding: 5px;">{{ title|title }}:</label>
+    <span style="display: table-cell;">
+        <select name="choice_{{title|lower}}" class="form form-control form-control-sm" id="id_choice_{{title|lower}}"
+                onchange="go_from_select(this.options[this.selectedIndex].value)" >
+            {% for choice in choices %}-->
+                <option {% if choice.selected %} selected="selected"{% endif %} value="{{ choice.query_string|iriencode }}">
+                    {{ choice.display }}
+                </option>
+            {% endfor %}
+        </select>
+    </span>
+</div>
