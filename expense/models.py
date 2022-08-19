@@ -6,6 +6,17 @@ from django.utils.translation import gettext_lazy as _
 from simple_history.models import HistoricalRecords
 
 from core.models import BaseModelMixin
+from io import BytesIO
+from PIL import Image
+from django.core.files import File
+
+
+def compress(image):
+    im = Image.open(image)
+    im_io = BytesIO()
+    im.save(im_io, 'JPEG', quality=60)
+    new_image = File(im_io, name=image.name)
+    return new_image
 
 
 class MoneyCollection(BaseModelMixin):
@@ -19,7 +30,7 @@ class MoneyCollection(BaseModelMixin):
     amount = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=300, choices=STATUS, default='PENDING')
     note = models.CharField(max_length=500, blank=True, null=True)
-    attachment = models.FileField(_("Attachment"), upload_to='collection/%Y/%m/%d/', blank=True, max_length=255)
+    attachment = models.ImageField(_("Attachment"), upload_to='collection/%Y/%m/%d/', blank=True, max_length=255)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='money_added', null=True,
                                  on_delete=models.SET_NULL)
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='money_modified', null=True,
@@ -28,6 +39,11 @@ class MoneyCollection(BaseModelMixin):
 
     def __str__(self):
         return "{}-{}({}₹)".format(self.building, self.flat_no, int(round(self.amount)))
+
+    def save(self, *args, **kwargs):
+        new_image = compress(self.attachment)
+        self.attachment = new_image
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Money Collection'
@@ -40,7 +56,7 @@ class Expense(BaseModelMixin):
     amount = models.DecimalField(max_digits=12, decimal_places=3)
     expense_owner = models.CharField(max_length=300)
     note = models.CharField(max_length=500, blank=True, null=True)
-    attachment = models.FileField(_("Attachment Path"), upload_to='expenses/%Y/%m/%d/', blank=True, max_length=255)
+    attachment = models.ImageField(_("Attachment"), upload_to='expenses/%Y/%m/%d/', blank=True, max_length=255)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='expense_added', null=True,
                                  on_delete=models.SET_NULL)
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='expense_modified', null=True,
@@ -49,6 +65,11 @@ class Expense(BaseModelMixin):
 
     def __str__(self):
         return "{}({}₹)".format(self.expense_name, int(round(self.amount)))
+
+    def save(self, *args, **kwargs):
+        new_image = compress(self.attachment)
+        self.attachment = new_image
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Expense'
