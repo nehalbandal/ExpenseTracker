@@ -35,10 +35,12 @@
         {% block usertools %}
         {% if has_permission %}
         <div id="user-tools">
+            {% if user.username != 'kamal' %}
             {% block welcome-msg %}
                 {% translate 'Welcome,' %}
                 <strong>{% firstof user.get_short_name user.get_username %}</strong>.
             {% endblock %}
+            {% endif %}
             {% block userlinks %}
 <!--                {% if site_url %}-->
 <!--                    <a href="{{ site_url }}">{% translate 'View site' %}</a> /-->
@@ -49,7 +51,7 @@
                         <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
                     {% endif %}
                 {% endif %}
-                {% if user.has_usable_password %}
+                {% if user.has_usable_password and user.username != 'kamal' %}
                 <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
                 {% endif %}
                 <a href="{% url 'admin:logout' %}">{% translate 'Log out' %}</a>

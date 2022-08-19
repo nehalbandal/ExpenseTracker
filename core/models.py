@@ -13,13 +13,16 @@ class BaseModelMixin(models.Model):
         abstract = True
 
 
-@receiver(post_save, sender=User)
-def user_saved(sender, instance, created, **kwargs):
-    all_perms = []
-    for grp in instance.groups.all():
-        all_perms += grp.permissions.values_list('id')
-    all_perms = [a[0] for a in all_perms]
-    perms = Permission.objects.filter(id__in=all_perms)
-    instance.user_permissions.all().delete()
-    instance.user_permissions.add(*perms)
-    print(instance.user_permissions.all())
+# @receiver(post_save, sender=User)
+# def user_saved(sender, instance, created, **kwargs):
+#     all_perms = []
+#     for grp in instance.groups.all():
+#         all_perms += grp.permissions.values_list('id')
+#     all_perms = [a[0] for a in all_perms]
+#     perms = Permission.objects.filter(id__in=all_perms)
+#     print(instance.user_permissions.all())
+#     instance.user_permissions.set({})
+#     print(instance.user_permissions.all())
+#     instance.user_permissions.add(*perms)
+#     instance.save()
+#     print(instance.user_permissions.all())
