@@ -41,8 +41,9 @@ class MoneyCollection(BaseModelMixin):
         return "{}-{}({}₹)".format(self.building, self.flat_no, int(round(self.amount)))
 
     def save(self, *args, **kwargs):
-        new_image = compress(self.attachment)
-        self.attachment = new_image
+        if self.attachment:
+            new_image = compress(self.attachment)
+            self.attachment = new_image
         super().save(*args, **kwargs)
 
     class Meta:
@@ -67,8 +68,9 @@ class Expense(BaseModelMixin):
         return "{}({}₹)".format(self.expense_name, int(round(self.amount)))
 
     def save(self, *args, **kwargs):
-        new_image = compress(self.attachment)
-        self.attachment = new_image
+        if self.attachment:
+            new_image = compress(self.attachment)
+            self.attachment = new_image
         super().save(*args, **kwargs)
 
     class Meta:
