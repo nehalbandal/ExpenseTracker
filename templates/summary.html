@@ -16,7 +16,7 @@
     <tbody>
     {% for item in collection_result %}
         <tr>
-            <th scope="row">{{ item.modification_date__date }}</th>
+            <th scope="row">{{ item.collection_date }}</th>
             <td>{{item.total_collection}}</td>
         </tr>
     {% endfor %}
@@ -32,7 +32,7 @@
     <tbody>
     {% for item in expense_result %}
         <tr>
-            <th scope="row">{{ item.modification_date__date }}</th>
+            <th scope="row">{{ item.expense_date }}</th>
             <td>{{item.total_expense}}</td>
         </tr>
     {% endfor %}

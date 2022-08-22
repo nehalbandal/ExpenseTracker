@@ -32,10 +32,10 @@ def add_default_flat_data(request):
 
 def show_summary(request):
     collection_result = MoneyCollection.objects.filter(type='VARGANI')\
-        .values('modification_date__date')\
+        .values('collection_date')\
         .annotate(total_collection=Sum('amount'))\
         .order_by()
-    expense_result = Expense.objects.values('modification_date__date')\
+    expense_result = Expense.objects.values('expense_date')\
         .annotate(total_expense=Sum('amount'))\
         .order_by()
 

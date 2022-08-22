@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
@@ -32,6 +34,7 @@ class MoneyCollection(BaseModelMixin):
     amount = models.PositiveIntegerField(default=0)
     type = models.CharField(_('Collection Type'), max_length=300, choices=COLLECTION_TYPE, default='VARGANI')
     payment_method = models.CharField(_('Payment Method'), max_length=300, choices=PAYMENT_METHOD, default='CASH')
+    collection_date = models.DateField(_("Collection Date"), blank=True, null=True, default=datetime.date.today)
     status = models.CharField(max_length=300, choices=STATUS, default='PENDING')
     note = models.CharField(max_length=500, blank=True, null=True)
     attachment = models.ImageField(_("Attachment"), upload_to='collection/%Y/%m/%d/', blank=True, max_length=255)
@@ -61,6 +64,7 @@ class Expense(BaseModelMixin):
     amount = models.DecimalField(max_digits=12, decimal_places=3)
     expense_owner = models.CharField(max_length=300)
     note = models.CharField(max_length=500, blank=True, null=True)
+    expense_date = models.DateField(_("Expense Date"), blank=True, null=True, default=datetime.date.today)
     attachment = models.ImageField(_("Attachment"), upload_to='expenses/%Y/%m/%d/', blank=True, max_length=255)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='expense_added', null=True,
                                  on_delete=models.SET_NULL)

@@ -14,9 +14,9 @@ class DropdownFilter(AllValuesFieldListFilter):
 
 
 class MoneyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'get_flat_no', 'status', 'amount']
+    list_display = ['name', 'collection_date', 'get_flat_no', 'status', 'amount']
     fieldsets = (
-        (None, {'fields': ('building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'note', 'attachment',
+        (None, {'fields': ('collection_date', 'building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'note', 'attachment',
                            'added_by', 'modified_by'), }),
     )
     readonly_fields = ['added_by', 'modified_by']
@@ -24,14 +24,15 @@ class MoneyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     form = CollectionForm
     actions = ["export_as_csv"]
+    list_editable = ['collection_date',]
 
     def export_as_csv(self, request, queryset):
-        field_names = ['building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'status', 'note',
+        field_names = ['collection_date', 'building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'status', 'note',
                        'attachment', 'added_by', 'modified_by', 'creation_date', 'modification_date', ]
 
         response = HttpResponse(content_type='text/csv')
-        datetime = time.strftime("%Y%m%d_%H%M%S")
-        filename =  "money_collection_" + datetime
+        curr_datetime = time.strftime("%Y%m%d_%H%M%S")
+        filename = "money_collection_" + curr_datetime
         response['Content-Disposition'] = 'attachment; filename={}.csv'.format(filename)
         writer = csv.writer(response)
         print(field_names)
@@ -66,7 +67,7 @@ class MoneyAdmin(admin.ModelAdmin):
 class ExpenseAdmin(admin.ModelAdmin):
     list_display = ['expense_name', 'get_amount', 'expense_owner',]
     fieldsets = (
-        (None, {'fields': ('expense_name', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
+        (None, {'fields': ('expense_date', 'expense_name', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
                            'modified_by'),
                 }),
     )
@@ -80,12 +81,12 @@ class ExpenseAdmin(admin.ModelAdmin):
     actions = ["export_as_csv"]
 
     def export_as_csv(self, request, queryset):
-        field_names = ['expense_name', 'expense_desc', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
+        field_names = ['expense_date', 'expense_name', 'expense_desc', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
                        'modified_by', 'creation_date', 'modification_date', ]
 
         response = HttpResponse(content_type='text/csv')
-        datetime = time.strftime("%Y%m%d_%H%M%S")
-        filename = "expenses_" + datetime
+        curr_datetime = time.strftime("%Y%m%d_%H%M%S")
+        filename = "expenses_" + curr_datetime
         response['Content-Disposition'] = 'attachment; filename={}.csv'.format(filename)
         writer = csv.writer(response)
         print(field_names)
