@@ -14,7 +14,7 @@ class DropdownFilter(AllValuesFieldListFilter):
 
 
 class MoneyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'collection_date', 'get_flat_no', 'status', 'amount']
+    list_display = ['name', 'get_flat_no', 'status', 'amount']
     fieldsets = (
         (None, {'fields': ('collection_date', 'building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'note', 'attachment',
                            'added_by', 'modified_by'), }),
@@ -24,7 +24,6 @@ class MoneyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     form = CollectionForm
     actions = ["export_as_csv"]
-    list_editable = ['collection_date',]
 
     def export_as_csv(self, request, queryset):
         field_names = ['collection_date', 'building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'status', 'note',
