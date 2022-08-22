@@ -23,11 +23,15 @@ class MoneyCollection(BaseModelMixin):
     BUILDING_CHOICES = [('A1', 'A1'), ('A2', 'A2'), ('A3', 'A3'), ('A4', 'A4'),
                         ('B1', 'B1'), ('B2', 'B2'), ('OTHERS', 'Others')]
     STATUS = [('PENDING', 'Pending'), ('PAID', 'Paid')]
+    COLLECTION_TYPE = [('VARGANI', 'Vargani'), ('SAVING', 'Saving'), ('OTHERS', 'Others')]
+    PAYMENT_METHOD = [('CASH', 'Cash'), ('UPI', 'UPI')]
 
     building = models.CharField(max_length=300, choices=BUILDING_CHOICES, default='OTHERS')
     flat_no = models.PositiveIntegerField(default=0)
     name = models.CharField(max_length=300)
     amount = models.PositiveIntegerField(default=0)
+    type = models.CharField(_('Collection Type'), max_length=300, choices=COLLECTION_TYPE, default='VARGANI')
+    payment_method = models.CharField(_('Payment Method'), max_length=300, choices=PAYMENT_METHOD, default='CASH')
     status = models.CharField(max_length=300, choices=STATUS, default='PENDING')
     note = models.CharField(max_length=500, blank=True, null=True)
     attachment = models.ImageField(_("Attachment"), upload_to='collection/%Y/%m/%d/', blank=True, max_length=255)

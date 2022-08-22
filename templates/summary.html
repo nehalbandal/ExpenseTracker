@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Summary</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body style="padding:0 10%">
+<br>
+<H2 align="center">Total Collection(Only Vargani)</H2>
+<table class="table table-striped">
+    <thead>
+        <th scope="col">Date</th>
+        <th scope="col">Total Collection</th>
+    </thead>
+    <tbody>
+    {% for item in collection_result %}
+        <tr>
+            <th scope="row">{{ item.modification_date__date }}</th>
+            <td>{{item.total_collection}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br>
+<H2 align="center">Total Expense</H2>
+<table class="table table-striped">
+    <thead>
+        <th scope="col">Date</th>
+        <th scope="col">Total Collection</th>
+    </thead>
+    <tbody>
+    {% for item in expense_result %}
+        <tr>
+            <th scope="row">{{ item.modification_date__date }}</th>
+            <td>{{item.total_expense}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

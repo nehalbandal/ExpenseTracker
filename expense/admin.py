@@ -16,7 +16,8 @@ class DropdownFilter(AllValuesFieldListFilter):
 class MoneyAdmin(admin.ModelAdmin):
     list_display = ['name', 'get_flat_no', 'status', 'amount']
     fieldsets = (
-        (None, {'fields': ('building', 'flat_no', 'name', 'amount', 'note', 'attachment', 'added_by', 'modified_by'), }),
+        (None, {'fields': ('building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'note', 'attachment',
+                           'added_by', 'modified_by'), }),
     )
     readonly_fields = ['added_by', 'modified_by']
     list_filter = [('building', DropdownFilter)]
@@ -25,8 +26,8 @@ class MoneyAdmin(admin.ModelAdmin):
     actions = ["export_as_csv"]
 
     def export_as_csv(self, request, queryset):
-        field_names = ['building', 'flat_no', 'name', 'amount', 'status', 'note', 'attachment', 'added_by',
-                       'modified_by', 'creation_date', 'modification_date', ]
+        field_names = ['building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'status', 'note',
+                       'attachment', 'added_by', 'modified_by', 'creation_date', 'modification_date', ]
 
         response = HttpResponse(content_type='text/csv')
         datetime = time.strftime("%Y%m%d_%H%M%S")
@@ -65,7 +66,8 @@ class MoneyAdmin(admin.ModelAdmin):
 class ExpenseAdmin(admin.ModelAdmin):
     list_display = ['expense_name', 'get_amount', 'expense_owner',]
     fieldsets = (
-        (None, {'fields': ('expense_name', 'amount', 'expense_owner', 'note', 'attachment', 'added_by', 'modified_by'),
+        (None, {'fields': ('expense_name', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
+                           'modified_by'),
                 }),
     )
     readonly_fields = ['added_by', 'modified_by']
