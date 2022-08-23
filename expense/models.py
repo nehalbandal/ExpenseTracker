@@ -24,7 +24,7 @@ def compress(image):
 class MoneyCollection(BaseModelMixin):
     BUILDING_CHOICES = [('A1', 'A1'), ('A2', 'A2'), ('A3', 'A3'), ('A4', 'A4'),
                         ('B1', 'B1'), ('B2', 'B2'), ('OTHERS', 'Others')]
-    STATUS = [('PENDING', 'Pending'), ('PAID', 'Paid')]
+    STATUS = [('PENDING', 'Pending'), ('PAID', 'Paid'), ('NOT_ACCEPTABLE', 'Not Acceptable')]
     COLLECTION_TYPE = [('VARGANI', 'Vargani'), ('SAVING', 'Saving'), ('OTHERS', 'Others')]
     PAYMENT_METHOD = [('CASH', 'Cash'), ('UPI', 'UPI')]
 

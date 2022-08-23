@@ -11,13 +11,13 @@
 <table class="table table-striped">
     <thead>
         <th scope="col">Date</th>
-        <th scope="col">Total Collection</th>
+        <th scope="col">Total Collection({{total_collection_count}})</th>
     </thead>
     <tbody>
     {% for item in collection_result %}
         <tr>
             <th scope="row">{{ item.collection_date }}</th>
-            <td>{{item.total_collection}}</td>
+            <td>{{item.total_collection}} ({{item.total_count}})</td>
         </tr>
     {% endfor %}
     </tbody>

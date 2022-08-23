@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -31,13 +31,16 @@ def add_default_flat_data(request):
 
 
 def show_summary(request):
-    collection_result = MoneyCollection.objects.filter(type='VARGANI')\
+    collection_result = MoneyCollection.objects.filter(type='VARGANI', status="PAID")\
         .values('collection_date')\
-        .annotate(total_collection=Sum('amount'))\
+        .annotate(total_collection=Sum('amount')) \
+        .annotate(total_count=Count('collection_date')) \
         .order_by()
+    total_collection_count = MoneyCollection.objects.filter(type='VARGANI', status="PAID").count()
     expense_result = Expense.objects.values('expense_date')\
         .annotate(total_expense=Sum('amount'))\
         .order_by()
-
+    print(total_collection_count)
     return render(request, template_name='summary.html', context={'collection_result': collection_result,
-                                                    'expense_result':expense_result})
+                                                                  'expense_result': expense_result,
+                                                                  'total_collection_count': total_collection_count})

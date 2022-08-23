@@ -6,7 +6,7 @@ class CollectionForm(ModelForm):
 
     def clean(self):
         cleaned_data = super(CollectionForm, self).clean()
-        if self.instance.id is None and cleaned_data['building'] != 'Others':
+        if cleaned_data['building'] != 'OTHERS' and self.instance.id is None:
             already_paid = MoneyCollection.objects.filter(building=cleaned_data['building'],
                                                           flat_no=cleaned_data['flat_no']).count()
             if already_paid:
