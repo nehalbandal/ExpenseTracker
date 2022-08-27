@@ -3,6 +3,7 @@ import time
 
 from django.contrib import admin
 from django.http import HttpResponse
+from django.utils.html import format_html
 
 from .models import *
 from django.contrib.admin.filters import AllValuesFieldListFilter
@@ -65,20 +66,26 @@ class MoneyAdmin(admin.ModelAdmin):
 
 
 class ExpenseAdmin(admin.ModelAdmin):
-    list_display = ['expense_name', 'get_amount', 'expense_owner',]
+    list_display = ['expense_name', 'get_amount', 'get_attachment']
     fieldsets = (
         (None, {'fields': ('expense_date', 'expense_name', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
                            'modified_by'),
                 }),
     )
     readonly_fields = ['added_by', 'modified_by']
+    actions = ["export_as_csv"]
 
     def get_amount(self, obj):
         return int(round(obj.amount))
 
     get_amount.short_description = 'Amount(₹)'
 
-    actions = ["export_as_csv"]
+    def get_attachment(self, obj):
+        if obj.attachment:
+            return format_html('<a href="{}">Bill</a>'.format(obj.attachment.url))
+        return "-"
+
+    get_attachment.short_description = 'Attachment'
 
     def export_as_csv(self, request, queryset):
         field_names = ['expense_date', 'expense_name', 'expense_desc', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
