@@ -14,7 +14,7 @@ class DropdownFilter(AllValuesFieldListFilter):
 
 
 class MoneyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'get_flat_no', 'status', 'amount']
+    list_display = ['get_flat_no', 'collection_date', 'status', 'amount']
     fieldsets = (
         (None, {'fields': ('collection_date', 'building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'note', 'attachment',
                            'added_by', 'modified_by'), }),
@@ -24,6 +24,7 @@ class MoneyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     form = CollectionForm
     actions = ["export_as_csv"]
+    sortable_by = ['collection_date', 'status', 'amount']
 
     def export_as_csv(self, request, queryset):
         field_names = ['collection_date', 'building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'status', 'note',
@@ -36,7 +37,7 @@ class MoneyAdmin(admin.ModelAdmin):
         writer = csv.writer(response)
         print(field_names)
         writer.writerow(field_names)
-        for obj in queryset:
+        for obj in queryset.order_by('collection_date'):
             row = writer.writerow([getattr(obj, field) for field in field_names])
 
         return response
@@ -90,7 +91,7 @@ class ExpenseAdmin(admin.ModelAdmin):
         writer = csv.writer(response)
         print(field_names)
         writer.writerow(field_names)
-        for obj in queryset:
+        for obj in queryset.order_by('expense_date'):
             row = writer.writerow([getattr(obj, field) for field in field_names])
 
         return response
