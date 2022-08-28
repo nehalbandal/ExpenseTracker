@@ -16,6 +16,9 @@ def settings_media(request):
     total_vargani_collection = total_vargani_collection.get('amount__sum', 0) if total_vargani_collection.get('amount__sum', 0) else 0
     total_vargani_count = MoneyCollection.objects.filter(type='VARGANI', status='PAID').count()
 
+    remaining = total_collection-total_expense
+
     return {'setting': settings, 'total_collection': total_collection, 'total_expense': total_expense,
-            'total_vargani_collection':total_vargani_collection, 'total_vargani_count': total_vargani_count}
+            'total_vargani_collection':total_vargani_collection, 'total_vargani_count': total_vargani_count,
+            'remaining': remaining}
 
