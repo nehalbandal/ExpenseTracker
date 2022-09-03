@@ -46,7 +46,7 @@ class MoneyAdmin(admin.ModelAdmin):
     export_as_csv.short_description = "Export Selected"
 
     def get_flat_no(self, obj):
-        return "{}-{}".format(obj.building, obj.flat_no) if obj.building!="OTHERS" else "Others"
+        return "{}-{}".format(obj.building, obj.flat_no) if obj.building != "OTHERS" else obj.name
 
     get_flat_no.short_description = 'Flat No.'
 
