@@ -12,6 +12,7 @@ from io import BytesIO
 from PIL import Image
 from django.core.files import File
 
+from datetime import date
 
 def compress(image):
     im = Image.open(image)
@@ -28,6 +29,8 @@ class MoneyCollection(BaseModelMixin):
     COLLECTION_TYPE = [('VARGANI', 'Ganpati Vargani'), ('MAHA_PRASAD_VARGANI', 'Mahaprasad Vargani'),
                        ('SAVING', 'Saving'), ('OTHERS', 'Others')]
     PAYMENT_METHOD = [('CASH', 'Cash'), ('UPI', 'UPI')]
+    YEAR_CHOICES = [('2022', '2022'), ('2023', '2023'), ('2024', '2024')]
+    
 
     building = models.CharField(max_length=300, choices=BUILDING_CHOICES, default='OTHERS')
     flat_no = models.PositiveIntegerField(default=0)
@@ -39,6 +42,7 @@ class MoneyCollection(BaseModelMixin):
     status = models.CharField(max_length=300, choices=STATUS, default='PENDING')
     note = models.CharField(max_length=500, blank=True, null=True)
     attachment = models.ImageField(_("Attachment"), upload_to='collection/%Y/%m/%d/', blank=True, max_length=255)
+    year = models.CharField(max_length=300, choices=YEAR_CHOICES, default='2022')
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='money_added', null=True,
                                  on_delete=models.SET_NULL)
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='money_modified', null=True,
@@ -60,6 +64,8 @@ class MoneyCollection(BaseModelMixin):
 
 
 class Expense(BaseModelMixin):
+    YEAR_CHOICES = [('2022', '2022'), ('2023', '2023'), ('2024', '2024')]
+    year = models.CharField(max_length=300, choices=YEAR_CHOICES, default='2022')
     expense_name = models.CharField(max_length=300)
     expense_desc = models.CharField(max_length=500, blank=True, null=True)
     amount = models.DecimalField(max_digits=12, decimal_places=3)
@@ -90,9 +96,10 @@ class Expense(BaseModelMixin):
 @receiver(post_save, sender=MoneyCollection)
 def update_status(sender, instance, created, **kwargs):
     print("In signal...", created)
+    year = str(date.today().year)
     if created and instance.building != 'OTHERS':
         already_paid = MoneyCollection.objects.filter(building=instance.building,
-                                                      flat_no=instance.flat_no).count()
+                                                      flat_no=instance.flat_no, year=year).count()
         if already_paid > 1:
             print("Deleting..because record is already created")
             instance.delete()

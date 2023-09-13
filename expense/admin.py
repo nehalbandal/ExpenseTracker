@@ -7,7 +7,7 @@ from django.utils.html import format_html
 
 from .models import *
 from django.contrib.admin.filters import AllValuesFieldListFilter
-from .forms import CollectionForm
+from .forms import CollectionForm, ExpenseForm
 
 
 class DropdownFilter(AllValuesFieldListFilter):
@@ -15,13 +15,13 @@ class DropdownFilter(AllValuesFieldListFilter):
 
 
 class MoneyAdmin(admin.ModelAdmin):
-    list_display = ['get_flat_no', 'collection_date', 'status', 'amount']
+    list_display = ['get_flat_no', 'collection_date', 'type', 'amount']
     fieldsets = (
-        (None, {'fields': ('collection_date', 'building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'note', 'attachment',
+        (None, {'fields': ('year', 'collection_date', 'building', 'flat_no', 'name', 'amount', 'type', 'payment_method', 'note', 'attachment',
                            'added_by', 'modified_by'), }),
     )
     readonly_fields = ['added_by', 'modified_by']
-    list_filter = [('building', DropdownFilter)]
+    list_filter = [('building', DropdownFilter), ('year', DropdownFilter)]
     search_fields = ('name',)
     form = CollectionForm
     actions = ["export_as_csv"]
@@ -52,7 +52,7 @@ class MoneyAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         queryset = super(MoneyAdmin, self).get_queryset(request)
-        return queryset.order_by('building', 'flat_no')
+        return queryset.order_by('-year', 'building', 'flat_no')
 
     def save_model(self, request, obj, form, change):
         instance = form.save(commit=False)
@@ -68,11 +68,13 @@ class MoneyAdmin(admin.ModelAdmin):
 class ExpenseAdmin(admin.ModelAdmin):
     list_display = ['expense_name', 'get_amount', 'get_attachment']
     fieldsets = (
-        (None, {'fields': ('expense_date', 'expense_name', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
+        (None, {'fields': ('year', 'expense_date', 'expense_name', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
                            'modified_by'),
                 }),
     )
     readonly_fields = ['added_by', 'modified_by']
+    list_filter = [('year', DropdownFilter)]
+    form = ExpenseForm
     actions = ["export_as_csv"]
 
     def get_amount(self, obj):
