@@ -8,7 +8,7 @@ from .models import *
 
 @login_required
 def add_default_flat_data(request):
-    year = str(date.today().year)
+    year = str(date.today().year-1)
     try:
         buildings = {
             'A1': 14,
