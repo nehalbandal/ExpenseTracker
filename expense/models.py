@@ -65,8 +65,11 @@ class MoneyCollection(BaseModelMixin):
 
 class Expense(BaseModelMixin):
     YEAR_CHOICES = [('2022', '2022'), ('2023', '2023'), ('2024', '2024')]
+    TYPE_CHOICES = [('GANESH_MURTHI', 'Ganesh Muthri'), ('POOJA_DECORATION', 'Pooja & Decoration'), ('GIFTS', 'Gifts'), ('MAHAPRASAD', 'Maha-Prasad'),
+                    ('ELECTRIC', 'Electric Kharch'), ('AHAVAL', 'Ahaval'), ('OTHERS', 'Others'), ('MIRAVNUK', 'Miravnuk'), ('MAGIL_BAKI', 'Magil Baki')]
     year = models.CharField(max_length=300, choices=YEAR_CHOICES, default='2022')
     expense_name = models.CharField(max_length=300)
+    expense_type = models.CharField(max_length=300, choices=TYPE_CHOICES, blank=True, null=True)
     expense_desc = models.CharField(max_length=500, blank=True, null=True)
     amount = models.DecimalField(max_digits=12, decimal_places=3)
     expense_owner = models.CharField(max_length=300)

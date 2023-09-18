@@ -46,9 +46,11 @@ class MoneyAdmin(admin.ModelAdmin):
     export_as_csv.short_description = "Export Selected"
 
     def get_flat_no(self, obj):
+        if obj.name != "":
+            return obj.name
         return "{}-{}".format(obj.building, obj.flat_no) if obj.building != "OTHERS" else obj.name
 
-    get_flat_no.short_description = 'Flat No.'
+    get_flat_no.short_description = 'Name'
 
     def get_queryset(self, request):
         queryset = super(MoneyAdmin, self).get_queryset(request)
@@ -68,7 +70,7 @@ class MoneyAdmin(admin.ModelAdmin):
 class ExpenseAdmin(admin.ModelAdmin):
     list_display = ['expense_name', 'get_amount', 'get_attachment']
     fieldsets = (
-        (None, {'fields': ('year', 'expense_date', 'expense_name', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
+        (None, {'fields': ('year', 'expense_date', 'expense_name', 'expense_type', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
                            'modified_by'),
                 }),
     )
