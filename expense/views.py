@@ -32,7 +32,7 @@ def add_default_flat_data(request):
 
 
 def show_summary(request):
-    year = str(date.today().year-1)
+    year = str(date.today().year)
     collection_result = MoneyCollection.objects.filter(type='VARGANI', year=year, status="PAID")\
         .values('collection_date')\
         .annotate(total_collection=Sum('amount')) \
