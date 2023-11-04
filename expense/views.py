@@ -42,6 +42,8 @@ def show_summary(request):
     expense_result = Expense.objects.filter(year=year).values('expense_date')\
         .annotate(total_expense=Sum('amount'))\
         .order_by()
+    expense_type_result = Expense.objects.filter(year=year).values('expense_type').annotate(total_expense=Sum('amount'))
     return render(request, template_name='summary.html', context={'collection_result': collection_result,
                                                                   'expense_result': expense_result,
+                                                                  'expense_type_result': expense_type_result,
                                                                   'total_collection_count': total_collection_count})

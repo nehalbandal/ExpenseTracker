@@ -68,7 +68,7 @@ class MoneyAdmin(admin.ModelAdmin):
 
 
 class ExpenseAdmin(admin.ModelAdmin):
-    list_display = ['expense_name', 'get_amount', 'get_attachment']
+    list_display = ['expense_name', 'expense_type', 'get_amount', 'get_attachment']
     fieldsets = (
         (None, {'fields': ('year', 'expense_date', 'expense_name', 'expense_type', 'amount', 'expense_owner', 'note', 'attachment', 'added_by',
                            'modified_by'),

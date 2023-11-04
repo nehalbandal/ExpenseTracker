@@ -27,7 +27,7 @@
 <table class="table table-striped">
     <thead>
         <th scope="col">Date</th>
-        <th scope="col">Total Collection</th>
+        <th scope="col">Total Amount</th>
     </thead>
     <tbody>
     {% for item in expense_result %}
@@ -39,5 +39,20 @@
     </tbody>
 </table>
 
+<H2 align="center">Total Expense - Category Wise</H2>
+<table class="table table-striped">
+    <thead>
+        <th scope="col">Type</th>
+        <th scope="col">Total Amount</th>
+    </thead>
+    <tbody>
+    {% for item in expense_type_result %}
+        <tr>
+            <th scope="row">{{ item.expense_type }}</th>
+            <td>{{item.total_expense}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 </body>
 </html>
