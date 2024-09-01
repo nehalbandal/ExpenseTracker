@@ -6,7 +6,7 @@ from expense.models import MoneyCollection, Expense
 
 
 def settings_media(request):
-    year = str(date.today().year)
+    year = str(date.today().year - 1)
     total_expense = Expense.objects.filter(year=year).aggregate(Sum('amount'))
     total_expense = total_expense.get('amount__sum', 0) if total_expense.get('amount__sum', 0) else 0
 
